@@ -1,5 +1,6 @@
 import pandas as pd
 import sqlite3
+from queries import*
 
 def bienvenida():
     print('''Bienvenido detective a esta investigación.\n
@@ -21,15 +22,9 @@ conn = sqlite3.connect("./data/sql-murder-mystery.db")
 # Obtenemos un cursor que utilizaremos para hacer las queries
 cursor = conn.cursor()
 
-# Query para ver el informe del crimen
-
-query = '''
-SELECT *
-FROM crime_scene_report
-WHERE ("date" LIKE 20180115) AND (type = "murder") AND (city LIKE "SQL City");
-'''
+#Informe
 def informe():
-    informe = pd.read_sql(query, conn)
+    informe = pd.read_sql(query1, conn)
     print("Imforme del crimen:")
     for lineas in informe["description"]:
         print(lineas)
@@ -39,10 +34,64 @@ def pistas_2():
           - Primer testigo: Vive en la última casa de Northwestern Dr
           - Segundo testigo: Se llama Annabel y viven en algún lugar de Franklin Ave
 ''')
-# Query para saber quién es la testigo_1
 
+#Testimonio del testigo 1
+def testigo_1():
+    df_testimonio_1 = pd.read_sql(query2, conn)
+    numero = df_testimonio_1["address_number"].max() #Buscamos la última casa
+    df_testigo1_num = df_testimonio_1[df_testimonio_1["address_number"] == numero]
+    df_testigo_1 = df_testigo1_num[["name", "transcript", "address_number"]]
+    testimonio = df_testigo_1["transcript"]
+    for linea in testimonio:
+        testimonio_1 = linea
+        print("Testimonio del primer testigo:\n")
+        print(f"\t{testimonio_1.replace(".", "\n")}")
 
-# Al estar ubicada en la última casa realizamos lo siguiente
+def mensaje():
+    print('''\n
+Una vez conocido el testimonio del primer testigo, 
+vamos a ver el testimonio del segundo testigo.
 
+Después recopilamos las pistas
+''')
 
+# Testimonio del testigo 2
 
+def testigo_2():
+    df_testigo_2 = pd.read_sql(query3, conn)
+    testimonio2 = df_testigo_2["transcript"]
+    for linea in testimonio2:
+        testimonio_2 = linea
+        print("\nTestimonio del segundo testigo:\n")
+        print(f"\t{testimonio_2.replace(",", "\n")}")
+
+def pistas_3():
+       print('''\nSiguientes pistas:\n
+          - El presunto asesino está en el gimnasio 'GET FIT NOW', 
+             es miembro GOLD, y su número de miembro comienza por '48Z'
+          - Además, se subió a un coche cuya matrícula incluía 'H42W'.
+          - El presunto asesino estuvo ahí el 9 de enero.
+''')
+
+# Posibles asesinos
+def buscando_asesino():
+    posibles_asesinos = pd.read_sql(query4, conn)
+    print(f'''\n
+Las personas que son GOLD
+y cuyo código de miembro comienza por '48Z' son:''')
+    print("\n",posibles_asesinos["name"][0])
+    print(posibles_asesinos["name"][1])
+
+def posible_asesino():
+    asesino = pd.read_sql(query5, conn)
+    print("\nInvestigando la matrícula, descubrimos que el presunto asesino es:")
+    print(f"\n{asesino["name"][1]}")
+
+def verificacion_1():
+    print('''\n
+La verificación en la solución es la sigiente:
+          "Congrats, you found the murderer! 
+          But wait, there's more... If you think you're up for a challenge, try querying the interview transcript of the murderer to find the real villain behind this crime. 
+          If you feel especially confident in your SQL skills, try to complete this final step with no more than 2 queries. 
+          Use this same INSERT statement with your new suspect to check your answer."
+    ''')
