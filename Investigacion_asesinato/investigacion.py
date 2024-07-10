@@ -95,3 +95,37 @@ La verificación en la solución es la sigiente:
           If you feel especially confident in your SQL skills, try to complete this final step with no more than 2 queries. 
           Use this same INSERT statement with your new suspect to check your answer."
     ''')
+
+def pistas_4():
+    print('''\n
+    Al comprobar la verificación, nos cuenta que hay un asunto más.
+    Nos piden ver la declaración del asesino
+    ''')
+
+def testimonio_asesino():
+    testimonio_asesino = pd.read_sql(query6, conn)
+    entrevista_asesino = testimonio_asesino["transcript"]
+    for linea in entrevista_asesino:
+        entrevista = linea
+        print("\n",entrevista.replace(".", "\n"))
+
+def pistas_5():
+    print('''\n
+Siguientes pistas:
+          - Mujer con una altura de 5'5" o 5'7".
+          - Tiene el pelo rojo y conduce un Tesla Model S.
+          - Además, asistió 3 veces al SQL Symphony Concert
+''')
+
+def asesina():
+    asesina = pd.read_sql(query9, conn)
+    nombre_asesina = asesina["name"][0]
+    print("\nEl nombre de la mujer que contrató a Jeremy:")
+    print(nombre_asesina)
+
+def verificacion_2():
+    print('''
+Congrats, you found the brains behind the murder! 
+Everyone in SQL City hails you as the greatest SQL detective of all time. 
+Time to break out the champagne!
+''')

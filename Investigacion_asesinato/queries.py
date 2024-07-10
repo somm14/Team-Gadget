@@ -42,3 +42,40 @@ ON a.license_id = b.id
 WHERE (a.id = 28819) OR (a.id = 67318)
 AND b.plate_number LIKE "%H42W%"
 '''
+
+# Query para ver el testimonio del asesino
+query6 = '''
+SELECT a.name, b.transcript
+FROM person AS a
+LEFT JOIN interview AS b
+ON a.id = b.person_id
+WHERE a.id = 67318
+'''
+
+# Query para buscar a la mujer que contrató al asesino
+# Buscamos por sus características.
+query7 = ''' 
+SELECT *
+FROM drivers_license
+WHERE hair_color = "red"
+AND gender = "female"
+AND (height > 65 AND height < 67)
+AND hair_color = "red"
+AND car_model LIKE "%Model%"
+'''
+# Filtramos por ID para buscar su nombre
+query8 = '''
+SELECT a.id, a.name
+FROM person AS a
+LEFT JOIN drivers_license AS b
+ON a.license_id = b.id
+WHERE license_id = 202298 OR license_id = 291182
+'''
+#Filtramos por nombre en los eventos de facebook
+query9 = '''
+SELECT a.*, b.name
+FROM facebook_event_checkin AS a
+LEFT JOIN person AS b
+ON a.person_id = b.id
+WHERE a.person_id = 90700 OR a.person_id = 99716
+'''

@@ -16,3 +16,10 @@ buscando_asesino()
 posible_asesino()
 
 verificacion_1()
+
+pistas_4()
+testimonio_asesino()
+
+pistas_5()
+asesina()
+verificacion_2()
